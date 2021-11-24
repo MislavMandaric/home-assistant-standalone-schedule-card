@@ -12,7 +12,7 @@ import '../components/scheduler-entity-row';
 import { capitalize, getLocale, AsArray } from '../helpers';
 import { fetchSchedules, fetchScheduleItem } from '../data/websockets';
 import { entityFilter } from '../data/entities/entity_filter';
-import { WebsocketEvent } from '../const';
+import { scheduleUpdatedEventType } from '../data/api_event_types';
 
 const computeScheduleTimestamp = (schedule: Schedule) =>
   new Date(schedule.timestamps[schedule.next_entries[0]]).valueOf()
@@ -65,14 +65,14 @@ export class SchedulerEntitiesCard extends SubscribeMixin(LitElement) {
     return [
       this.hass!.connection.subscribeMessage(
         (ev: SchedulerEventData) => this.updateScheduleItem(ev),
-        { type: WebsocketEvent }
+        { type: scheduleUpdatedEventType(this.config) }
       )
     ];
   }
 
   private async updateScheduleItem(ev: SchedulerEventData): Promise<void> {
     //only update single schedule
-    fetchScheduleItem(this.hass!, ev.schedule_id)
+    fetchScheduleItem(this.hass!, this.config, ev.schedule_id)
       .then(schedule => {
         const oldSchedule = this.schedules?.find(e => e.schedule_id == ev.schedule_id);
         let schedules = [...this.schedules || []];
@@ -105,7 +105,7 @@ export class SchedulerEntitiesCard extends SubscribeMixin(LitElement) {
   private async loadSchedules(): Promise<void> {
     //load all schedules
 
-    fetchSchedules(this.hass!)
+    fetchSchedules(this.hass!, this.config)
       .then(res => {
         let schedules = res;
 

@@ -105,7 +105,7 @@ export class SchedulerOptionsCard extends LitElement {
   async firstUpdated() {
     if (this.config?.tags) {
       (async () => await loadHaForm())();
-      const tagEntries = await fetchTags(this.hass!);
+      const tagEntries = await fetchTags(this.hass!, this.config);
       const existingTags = tagEntries.map(e => e.name);
       const configTags = AsArray(this.config.tags);
       this.tags = [...existingTags, ...configTags.filter(e => !existingTags.includes(e) && e != 'none')];

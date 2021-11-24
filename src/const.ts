@@ -42,5 +42,3 @@ export const DefaultCardConfig: CardConfig = {
   },
   tags: []
 };
-
-export const WebsocketEvent = "scheduler_updated";

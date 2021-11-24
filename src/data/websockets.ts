@@ -1,36 +1,43 @@
 import { HomeAssistant, fireEvent } from "custom-card-helpers";
-import { Schedule, ScheduleConfig, TagEntry } from "../types";
+import { CardConfig, Schedule, ScheduleConfig, TagEntry } from "../types";
+import { fetchScheduleEventType, fetchScheduleItemEventType, saveScheduleEventType, editScheduleEventType, deleteScheduleEventType, fetchTagsEventType } from "./api_event_types";
 import { html, TemplateResult } from 'lit';
 
-export const fetchSchedules = (hass: HomeAssistant): Promise<Schedule[]> =>
+export const fetchSchedules = (hass: HomeAssistant, config: CardConfig | null | undefined): Promise<Schedule[]> =>
   hass.callWS({
-    type: "scheduler",
+    type: fetchScheduleEventType(config),
   });
 
-export const fetchScheduleItem = (hass: HomeAssistant, schedule_id: string): Promise<Schedule> =>
+export const fetchScheduleItem = (hass: HomeAssistant, config: CardConfig | null | undefined, schedule_id: string): Promise<Schedule> =>
   hass.callWS({
-    type: "scheduler/item",
+    type: fetchScheduleItemEventType(config),
     schedule_id: schedule_id
   });
 
-export const saveSchedule = (hass: HomeAssistant, config: ScheduleConfig): Promise<boolean> => {
-  return hass
-    .callApi("POST", "scheduler/add", config)
-};
+export const saveSchedule = (hass: HomeAssistant, config: CardConfig | null | undefined, schedule_config: ScheduleConfig): Promise<boolean> =>
+  hass.callApi(
+    "POST",
+    saveScheduleEventType(config),
+    schedule_config
+  );
 
-export const editSchedule = (hass: HomeAssistant, config: ScheduleConfig & { schedule_id: string }): Promise<boolean> => {
-  return hass
-    .callApi("POST", "scheduler/edit", config)
-};
+export const editSchedule = (hass: HomeAssistant, config: CardConfig | null | undefined, schedule_config: ScheduleConfig & { schedule_id: string }): Promise<boolean> =>
+  hass.callApi(
+    "POST",
+    editScheduleEventType(config),
+    schedule_config
+  );
 
-export const deleteSchedule = (hass: HomeAssistant, schedule_id: string): Promise<boolean> => {
-  return hass
-    .callApi("POST", "scheduler/remove", { schedule_id: schedule_id })
-};
+export const deleteSchedule = (hass: HomeAssistant, config: CardConfig | null | undefined, schedule_id: string): Promise<boolean> =>
+  hass.callApi(
+    "POST",
+    deleteScheduleEventType(config),
+    { schedule_id: schedule_id }
+  );
 
-export const fetchTags = (hass: HomeAssistant): Promise<TagEntry[]> =>
+export const fetchTags = (hass: HomeAssistant, config: CardConfig | null | undefined): Promise<TagEntry[]> =>
   hass.callWS({
-    type: "scheduler/tags",
+    type: fetchTagsEventType(config),
   });
 
 export function showErrorDialog(target: HTMLElement, error: string | TemplateResult) {

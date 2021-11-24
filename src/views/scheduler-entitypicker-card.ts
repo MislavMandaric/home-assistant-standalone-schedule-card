@@ -51,7 +51,7 @@ export class SchedulerEditorCard extends LitElement {
   timeSchemeSelected = false;
 
   async firstUpdated() {
-    this.scheduleEntities = (await fetchSchedules(this.hass!)).map(e => e.entity_id);
+    this.scheduleEntities = (await fetchSchedules(this.hass!, this.config)).map(e => e.entity_id);
     if (this.entities && this.entities.length) {
       const group = this.getGroups().find(group => group.entities.find(e => e == this.entities![0].id));
       if (!group) return;
