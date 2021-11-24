@@ -97,6 +97,7 @@ export function ValidateConfig(config: any) {
     }
   };
 
+  Optional(config, 'backend_platform', 'string');
   Optional(config, 'discover_existing', 'boolean');
   Optional(config, 'standard_configuration', 'boolean');
   Optional(config, 'title', ['boolean', 'string']);

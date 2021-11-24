@@ -25,6 +25,7 @@ export enum EViews {
 
 export const DefaultCardConfig: CardConfig = {
   type: "scheduler-card",
+  backend_platform: "scheduler",
   discover_existing: true,
   standard_configuration: true,
   include: [],
