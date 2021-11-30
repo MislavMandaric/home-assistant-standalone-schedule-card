@@ -80,9 +80,7 @@ export class MyRelativeTime extends LitElement {
         const mins = Math.round(delta / secondsPerMinute - 60);
         const join = this._hass.localize('ui.common.and');
 
-        // @ts-expect-error
         const text1 = new Intl.RelativeTimeFormat(getLocale(this._hass).language, { numeric: "auto" }).format(1, 'hour');
-        // @ts-expect-error
         const text2 = Intl.NumberFormat(getLocale(this._hass).language, { style: "unit", unit: 'minute', unitDisplay: "long"}).format(mins);
       
         return `${text1} ${join} ${text2}`;
@@ -91,9 +89,7 @@ export class MyRelativeTime extends LitElement {
         const seconds = Math.round(delta - 60);
         const join = this._hass.localize('ui.common.and');
 
-        // @ts-expect-error
         const text1 = new Intl.RelativeTimeFormat(getLocale(this._hass).language, { numeric: "auto" }).format(1, 'minute');
-        // @ts-expect-error
         const text2 = Intl.NumberFormat(getLocale(this._hass).language, { style: "unit", unit: 'second', unitDisplay: "long" }).format(seconds);
 
         return `${text1} ${join} ${text2}`;
@@ -102,7 +98,6 @@ export class MyRelativeTime extends LitElement {
 
     // in 5 minutes/hours/seconds (or now)
     const diff = selectUnit(dateObj);
-       // @ts-expect-error
     return new Intl.RelativeTimeFormat(getLocale(this._hass).language, { numeric: "auto" }).format(diff.value, diff.unit);
   }
 

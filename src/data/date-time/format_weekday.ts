@@ -7,7 +7,7 @@ export const formatWeekday = (date: Date | number, locale: FrontendTranslationDa
   const supportLocaleString = () => {
     try {
       new Date().toLocaleDateString("i");
-    } catch (e) {
+    } catch (e: any) {
       return e.name === "RangeError";
     }
     return false;

@@ -27,7 +27,7 @@ export function formatTime(dateObj: Date, locale: FrontendLocaleData, formatOpti
   const supportLocaleString = () => {
     try {
       new Date().toLocaleTimeString("i");
-    } catch (e) {
+    } catch (e: any) {
       return e.name === "RangeError";
     }
     return false;

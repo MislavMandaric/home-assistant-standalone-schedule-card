@@ -9,7 +9,7 @@ export function formatDate(dateObj: Date, locale: FrontendLocaleData, isoFormat?
   const supportLocaleDateString = () => {
     try {
       new Date().toLocaleDateString("i");
-    } catch (e) {
+    } catch (e: any) {
       return e.name === "RangeError";
     }
     return false;
