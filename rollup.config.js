@@ -6,23 +6,34 @@ import { terser } from 'rollup-plugin-terser';
 import commonjs from '@rollup/plugin-commonjs';
 import replace from 'rollup-plugin-replace';
 import css from "rollup-plugin-import-css";
+import serve from 'rollup-plugin-serve';
+
+const dev = process.env.ROLLUP_WATCH;
+
+const serveopts = {
+  contentBase: ['./dist'],
+  host: '0.0.0.0',
+  port: 5000,
+  allowCrossOrigin: true,
+  headers: {
+    'Access-Control-Allow-Origin': '*',
+  },
+};
 
 const plugins = [
   nodeResolve(),
-  commonjs({
-    include: 'node_modules/**'
-  }),
+  commonjs(),
   typescript(),
   json(),
   babel({
     exclude: 'node_modules/**',
   }),
   replace({
-    'process.env.NODE_ENV': JSON.stringify('production'),
-    'process.env.VUE_ENV': JSON.stringify('browser')
+    'process.env.NODE_ENV': dev ? JSON.stringify('dev') : JSON.stringify('production'),
   }),
   css(),
-  terser()
+  dev && serve(serveopts),
+  !dev && terser(),
 ];
 
 export default [
@@ -30,10 +41,8 @@ export default [
     input: 'src/scheduler-card.ts',
     output: {
       dir: 'dist',
-      format: 'iife',
-      sourcemap: false
+      format: 'es',
     },
     plugins: [...plugins],
-    context: 'window'
   },
 ];
