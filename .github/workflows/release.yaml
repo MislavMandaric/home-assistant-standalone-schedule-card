@@ -1,0 +1,71 @@
+name: release
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  validate:
+
+    runs-on: "ubuntu-latest"
+    name: Validate
+
+    steps:
+        - uses: "actions/checkout@v2"
+        - name: HACS validation
+          uses: "hacs/action@main"
+          with:
+            category: "plugin"
+            ignore: brands
+        - name: Hassfest validation
+          uses: "home-assistant/actions/hassfest@master"
+
+  language_validate:
+
+    runs-on: "ubuntu-latest"
+    name: Language Validate
+
+    steps:
+      - uses: "actions/checkout@v2"
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8.x'
+      - uses: actions/cache@v2
+        name: Load pip cache
+        with:
+          path: ~/.cache/pip
+          key: language-validate-pip-cache
+      - name: Install dependencies
+        run: |
+          python3 -m pip install colorama setuptools
+          python3 -m pip install pyicu
+      - name: Language validation
+        run: |
+          script -e -c "python3 .github/workflows/check.py"
+
+  release:
+    needs: [validate, language_validate]
+
+    runs-on: ubuntu-latest
+    concurrency: release
+    environment:
+      name: release
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Setup NodeJS
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+        cache: 'npm'
+    - name: Install dependencies
+      run: npm install
+    - name: Build JS release
+      run: npm run build
+    - name: Semantic Release
+      uses: cycjimmy/semantic-release-action@v2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
