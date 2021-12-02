@@ -25,6 +25,7 @@ export enum EViews {
 
 export const DefaultCardConfig: CardConfig = {
   type: "scheduler-card",
+  backend_platform: "scheduler",
   discover_existing: true,
   standard_configuration: true,
   include: [],
@@ -41,5 +42,3 @@ export const DefaultCardConfig: CardConfig = {
   },
   tags: []
 };
-
-export const WebsocketEvent = "scheduler_updated";

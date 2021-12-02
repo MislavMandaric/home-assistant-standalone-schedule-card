@@ -43,8 +43,8 @@ export class SchedulerCardEditor extends LitElement implements LovelaceCardEdito
 
   async firstUpdated() {
     await loadHaForm();
-    this.scheduleEntities = (await fetchSchedules(this.hass!)).map(e => e.entity_id);
-    const tagOptions = (await fetchTags(this.hass!)).map(e => e.name);
+    this.scheduleEntities = (await fetchSchedules(this.hass!, this._config)).map(e => e.entity_id);
+    const tagOptions = (await fetchTags(this.hass!, this._config)).map(e => e.name);
     tagOptions.sort(sortAlphabetically);
     this.tagOptions = tagOptions;
   }
@@ -73,6 +73,13 @@ export class SchedulerCardEditor extends LitElement implements LovelaceCardEdito
               ></paper-input>
             `
         : ''}
+
+        <div class="header">Which backend platform to use</div>
+        <paper-input
+          label="Platform"
+          .value=${this.getPlatform()}
+          @value-changed=${this.updatePlatform}
+        ></paper-input>
 
         <div class="header">Show all schedules</div>
         <div class="text-field">
@@ -135,6 +142,12 @@ export class SchedulerCardEditor extends LitElement implements LovelaceCardEdito
     else return localize('ui.panel.common.title', getLocale(this.hass));
   }
 
+  private getPlatform() {
+    if (!this._config || !this.hass) return '';
+    if (typeof this._config.backend_platform == 'string') return this._config.backend_platform;
+    else return '';
+  }
+
   private updateTitleOption(e: Event) {
     const type = (e.target as HTMLInputElement).value;
     if (!this._config || !this.hass) return;
@@ -156,6 +169,13 @@ export class SchedulerCardEditor extends LitElement implements LovelaceCardEdito
     if (!this._config || !this.hass) return;
     const value = String((ev.target as HTMLInputElement).value);
     this._config = { ...this._config, title: value };
+    fireEvent(this, 'config-changed', { config: this._config });
+  }
+
+  private updatePlatform(ev: Event) {
+    if (!this._config || !this.hass) return;
+    const value = String((ev.target as HTMLInputElement).value);
+    this._config = { ...this._config, backend_platform: value };
     fireEvent(this, 'config-changed', { config: this._config });
   }
 

@@ -282,7 +282,7 @@ export class SchedulerCard extends LitElement {
 
     if (this.editItem) {
       if (IsDefaultName(schedule.name)) schedule = { ...schedule, name: "" };
-      editSchedule(this._hass, { ...schedule, schedule_id: this.editItem })
+      editSchedule(this._hass, this._config, { ...schedule, schedule_id: this.editItem })
         .catch(e => handleError(e, this))
         .then(() => {
           this.editItem = null;
@@ -290,7 +290,7 @@ export class SchedulerCard extends LitElement {
         });
     }
     else {
-      saveSchedule(this._hass, schedule)
+      saveSchedule(this._hass, this._config, schedule)
         .catch(e => handleError(e, this))
         .then(() => {
           this._view = EViews.Overview;
@@ -301,7 +301,7 @@ export class SchedulerCard extends LitElement {
   _deleteItemClick(): void {
     if (!this.editItem || !this._hass) return;
     const entity_id = this.editItem;
-    deleteSchedule(this._hass, entity_id)
+    deleteSchedule(this._hass, this._config, entity_id)
       .catch(e => handleError(e, this))
       .then(() => {
         this.editItem = null;
@@ -312,7 +312,7 @@ export class SchedulerCard extends LitElement {
   async _editItemClick(ev: CustomEvent) {
     if (!this._hass || !this._config) return;
 
-    const data = await fetchScheduleItem(this._hass, ev.detail);
+    const data = await fetchScheduleItem(this._hass, this._config, ev.detail);
     if (!data) return;
     const entities = unique(flatten(data.timeslots.map(e => e.actions.map(e => e.entity_id || e.service))));
     this.entities = entities.map(e => parseEntity(e, this._hass!, this._config!));

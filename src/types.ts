@@ -206,6 +206,7 @@ export interface ImportedEntry {
 /* config */
 
 export interface CardConfig extends LovelaceCardConfig {
+  backend_platform: string;
   discover_existing: boolean;
   standard_configuration: boolean;
   title: boolean | string;
