@@ -1,6 +1,6 @@
 {
   "name": "standalone-schedule-card",
-  "version": "3.0.0",
+  "version": "2.2.2",
   "description": "Home Assistant Lovelace card for displaying schedules from various integrations.",
   "keywords": [
     "home-assistant",
