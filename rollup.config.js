@@ -40,7 +40,7 @@ export default [
   {
     input: 'src/scheduler-card.ts',
     output: {
-      file: 'dist/home-assistant-standalone-schedule-card.js',
+      file: 'dist/standalone-schedule-card.js',
       format: 'es',
     },
     plugins: [...plugins],

@@ -14,11 +14,11 @@
   "license": "GNU GPL v3",
   "repository": {
     "type": "git",
-    "url": "git@github.com:MislavMandaric/home-assistant-standalone-schedule-card.git"
+    "url": "git@github.com:MislavMandaric/lovelace-standalone-schedule-card.git"
   },
-  "homepage": "https://github.com/MislavMandaric/home-assistant-standalone-schedule-card",
+  "homepage": "https://github.com/MislavMandaric/lovelace-standalone-schedule-card",
   "bugs": {
-    "url": "https://github.com/MislavMandaric/home-assistant-standalone-schedule-card/issues"
+    "url": "https://github.com/MislavMandaric/lovelace-standalone-schedule-card/issues"
   },
   "scripts": {
     "build": "npm run rollup",

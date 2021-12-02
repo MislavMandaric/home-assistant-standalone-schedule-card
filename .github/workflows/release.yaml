@@ -6,10 +6,10 @@ on:
 
 jobs:
   validate:
-  
+
     runs-on: "ubuntu-latest"
     name: Validate
-    
+
     steps:
         - uses: "actions/checkout@v2"
         - name: HACS validation
@@ -19,12 +19,12 @@ jobs:
             ignore: brands
         - name: Hassfest validation
           uses: "home-assistant/actions/hassfest@master"
-  
+
   language_validate:
-  
+
     runs-on: "ubuntu-latest"
     name: Language Validate
-    
+
     steps:
       - uses: "actions/checkout@v2"
       - name: Setup Python
